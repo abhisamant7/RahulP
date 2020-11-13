@@ -1,0 +1,28 @@
+version: '2'
+
+networks:
+    fabric:
+
+services:
+
+    orderer.client1.com:
+        extends:
+            file: docker-compose-base.yml
+            service: orderer
+        container_name: orderer.client1.com
+        environment:
+            - ORDERER_HOST=orderer.client1.com
+        extra_hosts:
+            - "peer0.client1.com:104.155.172.13"
+            - "peer0.org1.com:35.223.88.16"
+            - "peer0.org2.com:3.137.192.134"
+        volumes:
+            - ../crypto-config/ordererOrganizations/client1.com/orderers/orderer.client1.com/msp:/var/hyperledger/msp
+            - ../crypto-config/ordererOrganizations/client1.com/orderers/orderer.client1.com/tls:/var/hyperledger/tls
+            - ../channel-artifacts/:/var/hyperledger/configs
+        networks:
+          fabric:
+             aliases:
+               - net
+        ports:
+          - 7050:7050
